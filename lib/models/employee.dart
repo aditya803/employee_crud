@@ -33,8 +33,8 @@ class Employee {
 }
 
 class ContactMethod {
-  final String contactMethod;
-  final String value;
+  late final String contactMethod;
+  late final String value;
 
   ContactMethod({
     required this.contactMethod,
