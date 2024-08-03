@@ -1,50 +1,66 @@
 class Employee {
-  final String id;
+  String? id;
   final String name;
+  final int zipCode;
   final String address;
   final String city;
   final String country;
-  final String zipCode;
-  final List<ContactMethod> contactMethods;
+  final Contact contact;
 
   Employee({
-    required this.id,
+    this.id,
     required this.name,
+    required this.zipCode,
     required this.address,
     required this.city,
     required this.country,
-    required this.zipCode,
-    required this.contactMethods,
+    required this.contact,
   });
 
   factory Employee.fromJson(Map<String, dynamic> json) {
     return Employee(
-      id: json['_id'],
-      name: json['name'],
-      address: json['address'],
-      city: json['city'],
-      country: json['country'],
-      zipCode: json['zipCode'],
-      contactMethods: (json['contactMethods'] as List)
-          .map((i) => ContactMethod.fromJson(i))
-          .toList(),
+      id: json['_id'] ?? '',  // default empty string if _id is not present
+      name: json['name'] ?? '',
+      zipCode: json['zipcode'] ?? 0,
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
+      country: json['country'] ?? '',
+      contact: Contact.fromJson(json['contact'] ?? {}),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'zipcode': zipCode,
+      'address': address,
+      'city': city,
+      'country': country,
+      'contact': contact.toJson(),
+    };
   }
 }
 
-class ContactMethod {
-  late final String contactMethod;
-  late final String value;
+class Contact {
+   String contactMethod;
+   String number;
 
-  ContactMethod({
+  Contact({
     required this.contactMethod,
-    required this.value,
+    required this.number,
   });
 
-  factory ContactMethod.fromJson(Map<String, dynamic> json) {
-    return ContactMethod(
-      contactMethod: json['contact_method'],
-      value: json['value'],
+  factory Contact.fromJson(Map<String, dynamic> json) {
+    return Contact(
+      contactMethod: json['contact_method'] ?? '',
+      number: json['number'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'contact_method': contactMethod,
+      'number': number,
+    };
   }
 }

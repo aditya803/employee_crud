@@ -34,7 +34,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                   Text('Address: ${employee.address}, ${employee.city}, ${employee.country}, ${employee.zipCode}'),
                   SizedBox(height: 8),
                   Text('Contact Methods:'),
-                  ...employee.contactMethods.map((method) => Text('${method.contactMethod}: ${method.value}')).toList(),
+                  Text('${employee.contact.contactMethod}: ${employee.contact.number}'),
                 ],
               ),
             );

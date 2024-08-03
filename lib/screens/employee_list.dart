@@ -45,7 +45,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            EmployeeDetailsScreen(id: snapshot.data![index].id),
+                            EmployeeDetailsScreen(id: snapshot.data![index].id!),
                       ),
                     );
                   },

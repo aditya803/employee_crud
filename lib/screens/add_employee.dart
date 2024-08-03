@@ -14,26 +14,30 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   final _cityController = TextEditingController();
   final _countryController = TextEditingController();
   final _zipCodeController = TextEditingController();
-  final List<ContactMethod> _contactMethods = [];
+  List<Contact> _contactMethods = [];
 
   void _addContactMethod() {
-    _contactMethods.add(ContactMethod(contactMethod: 'EMAIL', value: ''));
-    setState(() {});
+    setState(() {
+      _contactMethods.add(Contact(contactMethod: 'Mobile', number: ''));
+    });
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final newEmployee = Employee(
-        id: '',
         name: _nameController.text,
         address: _addressController.text,
         city: _cityController.text,
         country: _countryController.text,
-        zipCode: _zipCodeController.text,
-        contactMethods: _contactMethods,
+        zipCode: int.parse(_zipCodeController.text),
+        contact: _contactMethods.isNotEmpty ? _contactMethods.first : Contact(contactMethod: 'Mobile', number: ''),
       );
       ApiService().createEmployee(newEmployee).then((_) {
         Navigator.pop(context);
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to add employee: $error'),
+        ));
       });
     }
   }
@@ -107,24 +111,28 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                   children: [
                     DropdownButton<String>(
                       value: method.contactMethod,
-                      items: ['EMAIL', 'PHONE'].map((String value) {
+                      items: ['Mobile', 'Phone'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
                         );
                       }).toList(),
                       onChanged: (newValue) {
-                        setState(() {
-                          method.contactMethod = newValue!;
-                        });
+                        if (newValue != null) {
+                          setState(() {
+                            method.contactMethod = newValue;
+                          });
+                        }
                       },
                     ),
                     Expanded(
                       child: TextFormField(
-                        initialValue: method.value,
+                        initialValue: method.number,
                         decoration: InputDecoration(labelText: 'Value'),
                         onChanged: (newValue) {
-                          method.value = newValue;
+                          setState(() {
+                            method.number = newValue;
+                          });
                         },
                       ),
                     ),
