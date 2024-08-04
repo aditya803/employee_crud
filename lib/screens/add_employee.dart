@@ -3,6 +3,10 @@ import '../models/employee.dart';
 import '../services/api_service.dart';
 
 class AddEmployeeScreen extends StatefulWidget {
+  final VoidCallback onEmployeeAdded;
+
+  AddEmployeeScreen({required this.onEmployeeAdded});
+
   @override
   _AddEmployeeScreenState createState() => _AddEmployeeScreenState();
 }
@@ -30,9 +34,10 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         city: _cityController.text,
         country: _countryController.text,
         zipCode: int.parse(_zipCodeController.text),
-        contact: _contactMethods.isNotEmpty ? _contactMethods.first : Contact(contactMethod: 'Mobile', number: ''),
+        contact: _contactMethods.first,
       );
       ApiService().createEmployee(newEmployee).then((_) {
+        widget.onEmployeeAdded();
         Navigator.pop(context);
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -111,18 +116,16 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                   children: [
                     DropdownButton<String>(
                       value: method.contactMethod,
-                      items: ['Mobile', 'Phone'].map((String value) {
+                      items: ['Mobile', 'Email'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
                         );
                       }).toList(),
                       onChanged: (newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            method.contactMethod = newValue;
-                          });
-                        }
+                        setState(() {
+                          method.contactMethod = newValue!;
+                        });
                       },
                     ),
                     Expanded(

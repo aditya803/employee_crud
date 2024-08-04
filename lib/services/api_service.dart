@@ -35,7 +35,7 @@ class ApiService {
   Future<Employee> fetchEmployee(String id) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/employees/$id?offset=0&limit=10'),
+        Uri.parse('$baseUrl/employees/$id'),
         headers: {
           'Content-Type': 'application/json',
           'projectId': projectId,
