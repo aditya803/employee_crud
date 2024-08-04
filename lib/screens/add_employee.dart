@@ -1,4 +1,6 @@
+import 'package:employee_crud/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/employee.dart';
 import '../services/api_service.dart';
 
@@ -59,58 +61,59 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
+              CustomTextField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                labelText: 'Name',
+                keyboardType: TextInputType.text,
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: 'Address'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter an address';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _cityController,
-                decoration: InputDecoration(labelText: 'City'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a city';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _countryController,
-                decoration: InputDecoration(labelText: 'Country'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a country';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _zipCodeController,
-                decoration: InputDecoration(labelText: 'Zip Code'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a zip code';
-                  }
-                  return null;
-                },
-              ),
+                if (value!.isEmpty) {
+                  return 'Please enter a name';
+                }
+                return null;
+              }),
+              CustomTextField(
+                  controller: _addressController,
+                  labelText: 'Address',
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter an address';
+                    }
+                    return null;
+                  }),
+              CustomTextField(
+                  controller: _cityController,
+                  labelText: 'City',
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a city';
+                    }
+                    return null;
+                  }),
+              CustomTextField(
+                  controller: _countryController,
+                  labelText: 'Country',
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a country';
+                    }
+                    return null;
+                  }),
+              CustomTextField(
+                  controller: _zipCodeController,
+                  labelText: 'Zip Code',
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a zip code';
+                    }
+                    return null;
+                  }),
+
               SizedBox(height: 16),
-              Text('Contact Methods:'),
+              Text('Contact Methods:',style: GoogleFonts.poppins(fontSize: 15),),
               ..._contactMethods.map((method) {
                 return Row(
                   children: [
@@ -128,33 +131,36 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                         });
                       },
                     ),
+
                     Expanded(
-                      child: TextFormField(
-                        initialValue: method.number,
-                        decoration: InputDecoration(labelText: 'Value'),
-                        onChanged: (newValue) {
-                          setState(() {
-                            method.number = newValue;
-                          });
-                        },
-                      ),
+                      child: CustomTextField(
+                        labelText: method.contactMethod, keyboardType: TextInputType.text, onChanged: (newValue) {
+                        setState(() {
+                          method.number = newValue!;
+                        });
+                      },),
                     ),
                   ],
                 );
               }).toList(),
-              TextButton(
-                onPressed: _addContactMethod,
-                child: Text('Add Contact Method'),
+              Container(
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  onPressed: _addContactMethod,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                  ),
+                  child: Text('Add Contact Method'),
+                ),
               ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Add Employee'),
-              ),
+
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed:_submitForm),
     );
   }
 }

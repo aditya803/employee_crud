@@ -76,6 +76,23 @@ class ApiService {
       throw Exception('Failed to create employee');
     }
   }
+  Future<void> updateEmployee(Employee employee) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/employees/${employee.id}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'projectId': projectId,
+        'environmentId': environmentId,
+      },
+      body: jsonEncode(employee.toJson()),
+    );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update employee');
+    }
+  }
+
 
   Future<void> deleteEmployee(String id) async {
     try {

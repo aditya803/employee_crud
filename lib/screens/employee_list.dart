@@ -1,3 +1,4 @@
+import 'package:employee_crud/widgets/employee_card.dart';
 import 'package:flutter/material.dart';
 import '../models/employee.dart';
 import '../services/api_service.dart';
@@ -32,6 +33,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         title: Text('Employee List'),
       ),
       body: FutureBuilder<List<Employee>>(
@@ -48,30 +50,15 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final employee = snapshot.data![index];
-                return ListTile(
-                  title: Text(employee.name),
-                  subtitle: Text(employee.address),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      ApiService().deleteEmployee(employee.id!).then((_) {
-                        _refreshEmployees();
-                      }).catchError((error) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Failed to delete employee: $error'),
-                        ));
-                      });
-                    },
-                  ),
+                return EmployeeCard(
+                  employee: employee,
                   onTap: () {
-                    Navigator.push(
-                      context,
+                    Navigator.push(context,
                       MaterialPageRoute(
-                        builder: (context) => EmployeeDetailsScreen(id: employee.id!),
-                      ),
-                    );
-                  },
-                );
+                          builder: (context) => EmployeeDetailsScreen(
+                              id: employee.id!, onTap: _refreshEmployees,
+                          )));
+                    }, delete: _refreshEmployees,);
               },
             );
           }
